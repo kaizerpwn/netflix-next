@@ -3,6 +3,9 @@ import { useCallback, useState } from "react"
 import axios from "axios"
 import { signIn } from "next-auth/react"
 
+import { FcGoogle } from 'react-icons/fc'
+import { FaGithub } from 'react-icons/fa'
+
 const Auth = () => {
 
     const [email, setEmail] = useState<string>("");
@@ -62,6 +65,18 @@ const Auth = () => {
                         <button onClick={variant === 'login' ? login : register} className="w-full py-3 mt-10 text-white transition bg-red-600 rounded-md hover:bg-red-700">
                             {variant === 'login' ? 'Login' : 'Sign up'}
                         </button>
+                        <div className="flex flex-row items-center justify-center gap-4 mt-8">
+                            <div className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80"
+                                onClick={() => signIn('google', { callbackUrl: '/' })}
+                            >
+                                <FcGoogle size={30} />
+                            </div>
+                            <div className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80"
+                                onClick={() => signIn('github', { callbackUrl: '/' })}
+                            >
+                                <FaGithub size={30} />
+                            </div>
+                        </div>
                         <p className="mt-12 text-neutral-500">
                             {variant === 'login' ? 'First time using Netflix?' : 'Already have an account?'}
                             <span onClick={toggleVariant} className="ml-1 text-white cursor-pointer hover:underline">
