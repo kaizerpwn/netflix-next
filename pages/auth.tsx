@@ -24,7 +24,7 @@ const Auth = () => {
                 email,
                 password,
                 redirect: true,
-                callbackUrl: '/'
+                callbackUrl: '/profiles'
             })
         } catch (error) {
             console.log(error)
@@ -67,12 +67,12 @@ const Auth = () => {
                         </button>
                         <div className="flex flex-row items-center justify-center gap-4 mt-8">
                             <div className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80"
-                                onClick={() => signIn('google', { callbackUrl: '/' })}
+                                onClick={() => signIn('google', { callbackUrl: '/profiles' })}
                             >
                                 <FcGoogle size={30} />
                             </div>
                             <div className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80"
-                                onClick={() => signIn('github', { callbackUrl: '/' })}
+                                onClick={() => signIn('github', { callbackUrl: '/profiles' })}
                             >
                                 <FaGithub size={30} />
                             </div>
