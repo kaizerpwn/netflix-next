@@ -33,15 +33,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(200).json(user);
         }
 
-        if (req.method === 'DELETE') {
+        if (req.method == 'DELETE') {
             const { currentUser } = await serverAuth(req, res);
-            const { movieId } = req.body;
+
+            const { movieId } = req.query;
+
+            if (typeof movieId !== 'string') {
+                throw new Error('Invalid Id');
+            }
+
+            if (!movieId) {
+                throw new Error('Missing Id');
+            }
 
             const existingMovie = await prismadb.movie.findUnique({
                 where: {
                     id: movieId,
                 }
-            })
+            });
 
             if (!existingMovie) {
                 throw new Error('Invalid ID');
@@ -56,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 data: {
                     favoriteIds: updatedFavoriteIds,
                 }
-            })
+            });
 
             return res.status(200).json(updatedUser);
         }
