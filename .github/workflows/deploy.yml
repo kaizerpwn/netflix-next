@@ -48,16 +48,22 @@ jobs:
           token: ${{ secrets.INFRASTRUCTURE_TOKEN }}
           path: infrastructure
 
-      - name: Update Deployment Manifest
+      - name: Verify File Presence
         run: |
-          # Verify the file exists
           echo "Checking file presence:"
           ls -la infrastructure/k8s/downtown-booking/
+          cat infrastructure/k8s/downtown-booking/deployment.yml
 
+      - name: Update Deployment Manifest
+        run: |
+          echo "Updating deployment manifest:"
+          # Print the current content of the file
+          cat infrastructure/k8s/downtown-booking/deployment.yml
+          
           # Update the image tag in the deployment manifest with the version based on commit SHA
           sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}|g' infrastructure/k8s/downtown-booking/deployment.yml
 
-          # Verify the change was made
+          # Print the updated content of the file
           echo "Updated deployment.yml:"
           cat infrastructure/k8s/downtown-booking/deployment.yml
 
