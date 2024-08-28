@@ -69,7 +69,7 @@ jobs:
           cat infrastructure/k8s/downtown-booking/deployment.yml
 
           # Update the image tag in the deployment manifest with the digest
-          sed -i "s|image: ghcr.io/kaizerpwn/netflix-next:.*|image: ghcr.io/kaizerpwn/netflix-next:${{ github.sha }}|g" infrastructure/k8s/downtown-booking/deployment.yml
+          sed -i "s|image: ghcr.io/kaizerpwn/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}|g" infrastructure/k8s/downtown-booking/deployment.yml
 
           # Print the file content after changes
           echo "After update:"
