@@ -28,7 +28,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PAT_TOKEN }}
 
       - name: Docker Build and Push
         uses: docker/build-push-action@v3
@@ -43,7 +43,7 @@ jobs:
         with:
           repository: kaizerpwn/infrastructure
           ref: 'main'
-          token: ${{ secrets.INFRA_REPO_PAT }}
+          token: ${{ secrets.PAT_TOKEN }}
           path: infrastructure
 
       - name: Update Deployment Manifest
