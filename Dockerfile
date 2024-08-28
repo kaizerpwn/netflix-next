@@ -8,8 +8,6 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+RUN npm run build 
 
-RUN npm install -g serve
-
-CMD ["serve", "-s", "out"]
+CMD ["npm", "start"]
