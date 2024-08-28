@@ -39,13 +39,6 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/nextjs-app:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/nextjs-app:latest
-
-      - name: Get Docker Image Digest
-        id: digest
-        run: |
-          IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ github.repository_owner }}/nextjs-app:latest)
-          echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> $GITHUB_ENV
 
       - name: Checkout Infra Repository
         uses: actions/checkout@v4
@@ -61,8 +54,8 @@ jobs:
           echo "Checking file presence:"
           ls -la infrastructure/k8s/downtown-booking/
 
-          # Update the image tag in the deployment manifest with digest
-          sed -i 's|image: ghcr.io/.*/nextjs-app@.*|image: ${{ env.IMAGE_DIGEST }}|g' infrastructure/k8s/downtown-booking/deployment.yml
+          # Update the image tag in the deployment manifest with the version based on commit SHA
+          sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}|g' infrastructure/k8s/downtown-booking/deployment.yml
 
           # Verify the change was made
           echo "Updated deployment.yml:"
@@ -78,6 +71,6 @@ jobs:
           if git diff --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update image to ${{ env.IMAGE_DIGEST }}"
+            git commit -m "Update image to version ${{ github.sha }}"
             git push origin main
-          fi 
+          fi
