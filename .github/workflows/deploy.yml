@@ -48,7 +48,7 @@ jobs:
 
       - name: Update Deployment Manifest
         run: |
-          sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/${{ github.repository_owner }}/nextjs-app:latest|g' infrastructure/deployment.yml
+          sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:latest|g' infrastructure/k8s/downtown-booking/deployment.yml
           git -C infrastructure config user.name "GitHub Actions Bot"
           git -C infrastructure config user.email "ibrahimokic711@gmail.com"
           git -C infrastructure commit -am "Update image to latest version"
