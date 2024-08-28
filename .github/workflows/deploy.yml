@@ -39,6 +39,13 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/nextjs-app:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/nextjs-app:latest
+
+      - name: Get Docker Image Digest
+        id: digest
+        run: |
+          IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ github.repository_owner }}/nextjs-app:${{ github.sha }})
+          echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> $GITHUB_ENV
 
       - name: Checkout Infra Repository
         uses: actions/checkout@v4
@@ -57,14 +64,15 @@ jobs:
       - name: Update Deployment Manifest
         run: |
           echo "Updating deployment manifest:"
-          # Print the current content of the file
+          # Print the file content before changes
+          echo "Before update:"
           cat infrastructure/k8s/downtown-booking/deployment.yml
           
-          # Update the image tag in the deployment manifest with the version based on commit SHA
-          sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}|g' infrastructure/k8s/downtown-booking/deployment.yml
+          # Update the image tag in the deployment manifest with the digest
+          sed -i "s|image: ghcr.io/kaizerpwn/netflix-next:.*|image: ghcr.io/kaizerpwn/netflix-next:${{ github.sha }}|g" infrastructure/k8s/downtown-booking/deployment.yml
 
-          # Print the updated content of the file
-          echo "Updated deployment.yml:"
+          # Print the file content after changes
+          echo "After update:"
           cat infrastructure/k8s/downtown-booking/deployment.yml
 
           # Check for git changes
