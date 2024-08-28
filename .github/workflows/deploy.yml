@@ -43,13 +43,13 @@ jobs:
         with:
           repository: kaizerpwn/infrastructure
           ref: 'main'
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.INFRASTRUCTURE_TOKEN }}
           path: infrastructure
 
       - name: Update Deployment Manifest
         run: |
           sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/${{ github.repository_owner }}/nextjs-app:latest|g' infrastructure/deployment.yml
           git -C infrastructure config user.name "GitHub Actions Bot"
-          git -C infrastructure config user.email "<your-email>"
+          git -C infrastructure config user.email "ibrahimokic711@gmail.com"
           git -C infrastructure commit -am "Update image to latest version"
           git -C infrastructure push
