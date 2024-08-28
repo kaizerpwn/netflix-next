@@ -48,8 +48,26 @@ jobs:
 
       - name: Update Deployment Manifest
         run: |
+          # Debug: Verify the file exists
+          echo "Checking file presence:"
+          ls -la infrastructure/k8s/downtown-booking/
+          
+          # Update the image tag in the deployment manifest
           sed -i 's|image: ghcr.io/.*/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:latest|g' infrastructure/k8s/downtown-booking/deployment.yml
-          git -C infrastructure config user.name "GitHub Actions Bot"
-          git -C infrastructure config user.email "ibrahimokic711@gmail.com"
-          git -C infrastructure commit -am "Update image to latest version"
-          git -C infrastructure push
+
+          # Verify the change was made
+          echo "Updated deployment.yml:"
+          cat infrastructure/k8s/downtown-booking/deployment.yml
+
+          # Commit and push changes if there are modifications
+          cd infrastructure
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add k8s/downtown-booking/deployment.yml
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update image to latest version"
+            git push origin main
+          fi
