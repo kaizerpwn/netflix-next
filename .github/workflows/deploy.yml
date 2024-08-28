@@ -75,20 +75,16 @@ jobs:
           echo "After update:"
           cat infrastructure/k8s/downtown-booking/deployment.yml
 
-      - name: Check Git Status
+      - name: Stage and Commit Changes
         run: |
           cd infrastructure
           git config user.name "GitHub Actions Bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git status
-          git diff
-
-      - name: Commit and Push Changes
-        run: |
-          cd infrastructure
           git add k8s/downtown-booking/deployment.yml
+          # Verify the staging
+          git status
           # Commit and push changes if there are modifications
-          if git diff --quiet; then
+          if git diff --cached --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Update image to version ${{ github.sha }}"
