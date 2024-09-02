@@ -38,13 +38,13 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/nextjs-app:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/nextjs-app:latest
+            ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}
+            ghcr.io/kaizerpwn/nextjs-app:latest
 
       - name: Get Docker Image Digest
         id: digest
         run: |
-          IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ github.repository_owner }}/nextjs-app:${{ github.sha }})
+          IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }})
           echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> $GITHUB_ENV
 
       - name: Checkout Infra Repository
@@ -58,29 +58,29 @@ jobs:
       - name: Verify File Presence
         run: |
           echo "Checking file presence:"
-          ls -la infrastructure/k8s/downtown-booking/
-          cat infrastructure/k8s/downtown-booking/deployment.yml
+          ls -la infrastructure/k8s/netflix-next/
+          cat infrastructure/k8s/netflix-next/deployment.yml
 
       - name: Update Deployment Manifest
         run: |
           echo "Updating deployment manifest:"
           # Print the file content before changes
           echo "Before update:"
-          cat infrastructure/k8s/downtown-booking/deployment.yml
+          cat infrastructure/k8s/netflix-next/deployment.yml
 
           # Update the image tag in the deployment manifest with the digest
-          sed -i "s|image: ghcr.io/kaizerpwn/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}|g" infrastructure/k8s/downtown-booking/deployment.yml
+          sed -i "s|image: ghcr.io/kaizerpwn/nextjs-app:.*|image: ghcr.io/kaizerpwn/nextjs-app:${{ github.sha }}|g" infrastructure/k8s/netflix-next/deployment.yml
 
           # Print the file content after changes
           echo "After update:"
-          cat infrastructure/k8s/downtown-booking/deployment.yml
+          cat infrastructure/k8s/netflix-next/deployment.yml
 
       - name: Stage and Commit Changes
         run: |
           cd infrastructure
           git config user.name "GitHub Actions Bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add k8s/downtown-booking/deployment.yml
+          git add k8s/netflix-next/deployment.yml
           # Verify the staging
           git status
           # Commit and push changes if there are modifications
